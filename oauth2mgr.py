@@ -305,14 +305,6 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
               '       token_url: {0}\n'.format(self.token_url) + \
               '     token_value: {0}\n'.format(self.token_abbrev()))
 
-    def refresh_access_token(self): #----------------------------------------<<<
-        """Refresh access token, using current refresh token."""
-        #/// write a /refresh_token route handler
-        #/// validation, error handling
-        #/// reset all relevant properties
-        pass
-
-
     def token_abbrev(self, token_val=None, type='access'): #-----------------<<<
         """Return abbreviated version of an access token for display purposes.
 

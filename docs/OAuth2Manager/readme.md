@@ -8,14 +8,14 @@ Restrictions:
 
 * OAuth2Manager is intended to be used with the Bottle web framework, and it uses Bottle's _redirect_ method and _request_ object for convenience and code simplicity.
 * This is _sample_ code for learning about OAuth 2.0, and does not include many security best practices. **Do not use this code in production.**
-* This code is based on the [OAuth 2.0 specification](http://www.rfc-editor.org/rfc/rfc6749.txt), and it _should_ work with other OAuth 2.0 providers but has only been tested with Azure Active Directory and the Microsoft Graph API.
-* The only OAuth 2.0 grant type supported is Authorization Code Grant, which is the most commonly used process flow for web apps. At this time, no support is provided for the other grant types: Implicit Grant, Resource Owner Password Credentials Grant, and Client Credentials Grant.
+* This code is based on the [OAuth 2.0 specification](http://www.rfc-editor.org/rfc/rfc6749.txt), so it should work with any  resource protected by OAuth 2.0, but it has only been tested with Azure Active Directory and the Microsoft Graph API.
+* The only OAuth 2.0 grant type supported is Authorization Code Grant, which is the most commonly used process flow for web apps. No support is provided for the other grant types: Implicit Grant, Resource Owner Password Credentials Grant, and Client Credentials Grant.
 
 The methods of OAuth2Manager handle the steps in OAuth 2.0 process flow as show here on a diagram from the [Oauth 2.0 spec](http://www.rfc-editor.org/rfc/rfc6749.txt):
 
 ![Oauth2 flow](../images/oauth2flow.png)
 
-## load_settings() method
+## config_read() method
 
 This method is called by ```__init__``` to load configuration settings from a ```config.json``` file, as covered in [Getting Started](../GettingStarted/readme.md). The config.json file should have this format:
 
@@ -69,6 +69,8 @@ The authorized() method receives the authorization grant from Azure AD and pass 
 
 This method retrieves the access token and saves it and related information (expiration time, refresh token) to properties of the OAuth2Manager object, making it ready to handle authentication for calls to the Graph API.
 
+The refresh token is saved, but automatic refreshing of access tokens has not been implemented at this time.
+
 ## get() method, post() method
 
 These are wrappers to HTTP Get/Put. They can take relative URLs for API endpoints (e.g., ```/organization```), and they send the current access token with each request.
@@ -85,3 +87,11 @@ They take an optional dictionary of HTTP headers, which can override or add to t
   "return-client-request-id" : "true"
 }
 ```
+
+## cache() method
+
+This method handles caching of authentication state between sessions. It takes one of three _actions_ as an argument:
+
+* _action='save'_ saves the current access token and related metadata to a ```cache.json``` file. If there is a profile photo available for the currently authenticated user, it is saved to a separate ```cache.photo``` file.
+* _action='read' reads ```cache.json``` (if it exists) and loads the refresh token and related metadata into properties of the current OAuth2Manager instance. It also loads ```cache.photo``` if it exists.
+* _action='clear'_ deletes the cache files if they exist.
