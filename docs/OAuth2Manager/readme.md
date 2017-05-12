@@ -39,7 +39,7 @@ This method is called by ```__init__``` to load configuration settings from a ``
 
 ## login() method
 
-This method handles authentication. In the [sample app](https://github.com/dmahugh/bottle-msgraph), we use a ```/login``` route with a login() handler function that simply calls the method:
+This method handles authentication. In the [sample app](https://github.com/dmahugh/bottle-msgraph), we use a ```/login``` route with a ```login()``` handler function that simply calls the method:
 
 ```python
 @route('/login')
@@ -63,7 +63,7 @@ def authorized():
     return msgraphapi.authorized()
 ```
 
-The authorized() method receives the authorization grant from Azure AD and pass it to get_token().
+The ```authorized()``` method receives the authorization grant from Azure AD and pass it to ```get_token()```.
 
 ## get_token() method
 

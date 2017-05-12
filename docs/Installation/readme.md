@@ -6,7 +6,7 @@ This sample is intended as a Graph/AAD/OAuth2 learning tool for _Python_ develop
 
 Clone the https://github.com/dmahugh/bottle-msgraph repo to get the app, and then install these prerequisites:
 
-* [Python 3.6](https://www.python.org/) (should_ work with any Python 3.x version, but I haven't tested others)
+* [Python 3.6](https://www.python.org/) (should work with any Python 3.x version, but I haven't tested others)
 * [Bottle](https://bottlepy.org/docs/dev/) web micro-framework
 * [Requests](http://docs.python-requests.org/en/master/) library for handling HTTP requests
 

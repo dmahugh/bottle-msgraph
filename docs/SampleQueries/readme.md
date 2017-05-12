@@ -16,13 +16,13 @@ Note that an instance of ```OAuth2Manager``` named ```msgraphapi``` is created a
 import oauth2mgr
 msgraphapi = oauth2mgr.OAuth2Manager()
 ```
-The ```msgraphapi```object tracks authentication state and provides methods for handling login, logout, and authenticated calls to the Graph API.
+The ```msgraphapi``` object tracks authentication state and provides methods for handling login, logout, and authenticated calls to the Graph API.
 
 ### oauth2mgr.py
 
 The ```OAuth2Manager``` class in 
 [oauth2mgr.py](https://github.com/dmahugh/bottle-msgraph/blob/master/oauth2mgr.py)
-handles authentication details. [This page covers how to use OAuth2Manager.](OAuth2Manager/readme.md)
+handles authentication details. [This page covers how to use OAuth2Manager.](../OAuth2Manager/readme.md)
 
 ### app.py
 
@@ -34,7 +34,7 @@ import routes # HTTP handlers for all routes
 
 ### about.py
 
-This file defines the sysinfo() function to return information about the runtime environment, as displayed on the [About page](../images/about.png).
+This file defines the ```sysinfo()``` function to return information about the runtime environment, as displayed on the [About page](../images/about.png).
 
 ## Sample Queries
 
