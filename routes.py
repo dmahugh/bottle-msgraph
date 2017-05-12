@@ -2,6 +2,12 @@
 Routes and views for the bottle application.
 """
 import json
+import os
+import platform
+import shutil
+import socket
+import sys
+from pip.operations import freeze
 
 from bottle import error, redirect, request, route, template, view
 import oauth2mgr
@@ -12,8 +18,26 @@ msgraphapi = oauth2mgr.OAuth2Manager()
 @view('about')
 def about(): #---------------------------------------------------------------<<<
     """About page - about.tpl"""
-    #print_env('about()', request, msgraphapi)
-    return dict(client_ip=request.environ.get('REMOTE_ADDR'))
+    sys_info = dict()
+    sys_info['PY_VERSION'] = sys.version.strip().split(' ')[0] + \
+        (' (64-bit)' if '64 bit' in sys.version else ' (32-bit)')
+    sys_info['PY_LOCATION'] = sys.prefix
+    sys_info['PY_PACKAGES'] = ','.join([_ for _ in freeze.freeze()])
+    sys_info['PY_PATH'] = ','.join(sys.path)
+    sys_info['OS_VERSION'] = platform.platform()
+    sys_info['HOST_NAME'] = socket.gethostname()
+    sys_info['HOST_PROC'] = \
+        os.environ['PROCESSOR_ARCHITECTURE'] + ', ' + \
+        os.environ['PROCESSOR_IDENTIFIER'].split(' ')[0] + ', ' + \
+        os.environ['NUMBER_OF_PROCESSORS'] + ' cores'
+    sys_info['HOST_IPADDR'] = socket.gethostbyname(socket.gethostname())
+    sys_info['CLIENT_IP'] = request.environ.get('REMOTE_ADDR')
+    sys_info['DIRECTORY'] = os.getcwd()
+    size, used, free = shutil.disk_usage('/')
+    sys_info['DISK_SIZE'] = '{:,}'.format(size)
+    sys_info['DISK_USED'] = '{:,}'.format(used)
+    sys_info['DISK_FREE'] = '{:,}'.format(free)
+    return dict(sysdict=sys_info)
 
 @route('/login/authorized')
 def authorized(): #----------------------------------------------------------<<<

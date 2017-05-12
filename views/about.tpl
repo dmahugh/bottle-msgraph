@@ -1,9 +1,7 @@
 % rebase('layout.tpl', title='About')
 % import os
 % import sys
-% from about import sysinfo
 % from routes import msgraphapi
-% sysdict = sysinfo()
 % free = int(sysdict['DISK_FREE'].replace(',', ''))
 % total = int(sysdict['DISK_SIZE'].replace(',', ''))
 % free_space = '{0} bytes ({1}% of total)'. \
@@ -45,7 +43,7 @@
   <tr><th>Server IP address:</th>
     <td>{{ sysdict['HOST_IPADDR'] }}</td></tr>
   <tr><th>Client IP address:</th>
-    <td>{{ client_ip }}</td></tr>
+    <td>{{ sysdict['CLIENT_IP'] }}</td></tr>
    <tr><th>Working directory:</th>
     <td>{{ sysdict['DIRECTORY'] }}</td></tr>
   <tr><th>Free disk space:</th>
