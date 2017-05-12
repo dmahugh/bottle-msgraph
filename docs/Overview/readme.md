@@ -29,13 +29,7 @@ This file contains the definition of the ```OAuth2Manager``` class, which handle
 
 ### views
 
-This folder contains the templates for each of the rendered pages.
-
-/// .tpl, HTML plus Python code delimited by %
-
-/// note @view()
-
-/// what is Bottle's template engine?
+This folder contains the templates for each page of the app. These are ```.tpl``` files that are rendered by Bottle's [SimpleTemplate](http://bottlepy.org/docs/dev/stpl.html) template engine. They're HTML with inline Python code on lines that begin with a ```%``` character.
 
 ### static
 
