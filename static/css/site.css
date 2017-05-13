@@ -1,0 +1,277 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+div.photo {
+    background-color: #333333;
+    color: white;
+    font-family: Segoe UI, Verdana, sans-serif;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 20px;
+    padding-left: 0;
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 10px;
+}
+
+div.photo p {
+    margin: 5px 0 0 20px;
+    padding-bottom: 10px;
+}
+
+.copyright {
+    color: #888888;
+    text-align: "center";
+    font-size: .9em;
+}
+
+.width400px {
+    width: 400px;
+}
+
+table.sysinfo {
+    border-collapse: "separate";
+    border-spacing: 10px;
+}
+
+.sysinfo th, td {
+    vertical-align: text-top;
+    padding: 2px 2px 2px 8px;
+}
+
+.sysinfo th {
+    text-align: right;
+}
+.sysinfo td {
+    font-family: Consolas,Monaco,Lucida Console,Courier New, monospace;
+}
+
+/* home-page styling */
+
+.homepage-container {
+  width: 800px;
+}
+
+button.homepage {
+  margin: 10px;
+}
+
+/* data-table styles (used for displaying inbox, contacts) */
+
+table.data-table {
+  margin: 0 0 40px 0;
+  width: 100%;
+  display: table;
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+}
+
+table.data-table th {
+  color: #ffffff;
+  background: #2980b9;
+  padding: 6px 12px;
+}
+
+table.data-table td {
+  color: #2040c0;
+  padding: 6px 12px;
+}
+
+table.data-table tr:nth-of-type(odd) {
+  background: #e8e8e8;
+}
+
+/* api-endpoints styles (used for displaying scope/endpoint info) */
+
+table.api-endpoints {
+  margin: 0 0 40px 0;
+  width: 100%;
+  display: table;
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+  background: #cccccc;
+}
+
+table.api-endpoints th {
+  color: #ffffff;
+  background: #2980b9;
+  padding: 6px 12px;
+}
+
+table.api-endpoints td {
+  color: #2040c0;
+  padding: 6px 12px;
+}
+
+table.api-endpoints td.endpoint {
+  font-family: Consolas,Courier New,serif;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #000000;
+}
+
+table.api-endpoints tr:nth-of-type(odd) {
+  background: #e8e8e8;
+}
+
+/* orginfo table styles */
+
+table.orginfo {
+  margin: 0 0 40px 0;
+  width: fit-content;
+  display: table;
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+}
+
+table.orginfo th {
+  color: #ffffff;
+  background: #2980b9;
+  padding: 6px 12px;
+  text-align: right;
+  border: 2px solid white;
+}
+
+table.orginfo td {
+  color: #2040c0;
+  padding: 6px 12px;
+}
+
+table.orginfo tr:nth-of-type(odd) {
+  background: #e8e8e8;
+}
+
+/* button customizations to match color scheme */
+
+.btn-primary {
+  background-color: #2980b9;
+  color: #ffffff;
+}
+
+.btn-about {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+/* navbar customizations */
+
+.navbar {
+  height: 50px;
+  background-color: #2c3e50;
+  border: none;
+  color: #cccccc;
+}
+
+.navbar-header .navbar-brand:hover,
+.navbar-header .navbar-brand:focus {
+  color: #ffffff;
+  background-color: #286090;
+}
+
+/* make menu items vertically centered */
+.navbar-nav {
+    position: relative;
+    top: -20px;
+}
+
+.navbar-nav > li > a {
+  color: #cccccc;
+}
+
+.navbar-collapse .navbar-nav > li > a:hover,
+.navbar-collapse .navbar-nav > li > a:focus {
+  color: #ffffff;
+  background-color: #286090;
+  height: 50px;
+}
+
+/* change the screen-width breakpoint at which the navbar collapses into a menu */
+@media (max-width: 1170px) {
+    .navbar-header {
+        float: none;
+    }
+    .navbar-left,.navbar-right {
+        float: none !important;
+    }
+    .navbar-toggle {
+        display: block;
+    }
+    .navbar-collapse {
+        border-top: 1px solid transparent;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .navbar-fixed-top {
+        top: 0;
+        border-width: 0 0 1px;
+    }
+    .navbar-collapse.collapse {
+        display: none!important;
+    }
+    .navbar-nav {
+        float: none!important;
+        margin-top: 7.5px;
+    }
+    .navbar-nav>li {
+        float: none;
+    }
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .collapse.in{
+        display:block !important;
+    }
+}
+
+/* status messages */
+
+.status-success {
+  font-size: 12px;
+  color: green;
+}
+
+.status-fail {
+  font-size: 12px;
+  color: red;
+}

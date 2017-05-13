@@ -1,0 +1,15 @@
+{
+    "app_name": "bottle-msgraph",
+    "app_id": "<value from app registration portal>",
+    "app_secret": "<value from app registration portal>",
+    "redirect_url": "http://localhost:5000/login/authorized",
+    "scopes": [
+        "User.Read",
+        "Mail.Send",
+        "Mail.Read",
+        "Contacts.Read",
+        "offline_access"],
+    "api_base": "https://graph.microsoft.com/v1.0/",
+    "auth_base": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+    "token_url": "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+}
