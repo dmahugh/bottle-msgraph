@@ -91,7 +91,9 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.state = '' # reset session state to prevent re-use
 
         token_response = self.get_token(request.query.code)
-        jsondata = token_response.json()
+        if not token_response:
+            print('>>> OAuth2Manager: request for access token failed')
+            redirect('/')
 
         if not token_response.ok:
             # error - return to user the error text from Azure AD
@@ -235,8 +237,10 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
                       grant_type='authorization_code',
                       code=authcode,
                       redirect_uri=self.redirect_url))
-        self.save_token(response)
-        return response
+        if self.save_token(response):
+            return response
+        else:
+            return None # the request for an access token failed
 
     def login(self, redirect_to): #------------------------------------------<<<
         """Log in (authenticate against Azure AD)"""
@@ -260,7 +264,11 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         redirect(self.auth_url, 302)
 
     def logout(self, redirect_to='/'): #-------------------------------------<<<
-        """Log out of current connection and redirect to specified route."""
+        """Log out of current connection and redirect to specified route.
+
+        If redirect_to == None, no redirection will take place and we just
+        clear the current logged-in status.
+        """
         self.loggedin = False
         self.loggedin_name = ''
         self.loggedin_email = ''
@@ -269,8 +277,9 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.token_expires_at = 0
         self.cache('clear') # clear cached auth state
 
-        print('>>> OAuth2Manager: user logout')
-        redirect(redirect_to)
+        if redirect_to:
+            print('>>> OAuth2Manager: user logout')
+            redirect(redirect_to)
 
     def post(self, endpoint, headers=None, data=None, verify=False, params=None):
         """POST to API (authenticated with access token).
@@ -325,9 +334,19 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.save_token(response)
 
     def save_token(self, response): #----------------------------------------<<<
-        """Save an access token and related metadata. Input is the response
-        object returned by the self.token_url endpoint."""
+        """Save an access token and related metadata.
+
+        Input is the response object returned by the self.token_url endpoint.
+
+        Returns True if the token was successfully saved, False if not. (For
+        example, the token_url API may have returned no token.)
+        """
         jsondata = response.json()
+        if not 'access_token' in jsondata:
+            self.logout(redirect_to=None) # log out and clear local cache
+            print('>>> Oauth2Manager: request for access token failed')
+            return False # no access token found
+
         self.access_token = jsondata['access_token']
         self.loggedin = True # we're authenticated now
 
@@ -354,6 +373,7 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
 
         print('>>> OAuth2Manager: access token acquired ({0} bytes)'. \
             format(len(self.access_token)))
+        return True
 
     def token_abbrev(self, token_val=None, token_type='access'): #-----------<<<
         """Return abbreviated version of an access token for display purposes.
