@@ -4,6 +4,7 @@ Licensed under the MIT License."""
 
 import json
 import os
+import pprint
 import time
 import urllib.parse
 import uuid
@@ -82,8 +83,8 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         """We've been given an authorization code, so use it to request an
         access token."""
 
-        # verify state received is same as state sent with the HTTPS request, which
-        # confirms that we initiated this login attempt
+        # verify state received is same as state sent with the HTTPS request,
+        # which confirms that we initiated this login attempt
         if self.state != request.query.state:
             raise Exception('>>> SHUTTING DOWN: state mismatch' + \
                 '\n\nState SENT: {0}\n\nState RECEIVED: {1}'. \
@@ -102,8 +103,8 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         me_response = self.get('me')
         me_data = me_response.json()
         if 'error' in me_data:
-            print('ERROR returned by /me endpoint:')
-            print(str(me_data))
+            print('>>> OAuth2Manager: /me endpoint returned an error ... ' + \
+                str(me_data))
 
         # set properties for current user name, email, public name (with domain)
         fullname = me_data['displayName']
@@ -112,7 +113,8 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.loggedin_name = fullname
         self.loggedin_email = email
         if '@' in email:
-            self.loggedin_public = '{0} (@{1})'.format(fullname, email.split('@')[1].split('.')[0])
+            self.loggedin_public = '{0} (@{1})'. \
+                format(fullname, email.split('@')[1].split('.')[0])
         else:
             self.loggedin_public = '{0} ({1})'.format(fullname, email)
 
@@ -187,8 +189,8 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
             config['app_id'].endswith('>')) or \
             (config['app_secret'].startswith('<') and
              config['app_secret'].endswith('>')):
-            print('WARNING: configuration may be invalid, ' + \
-                configfile + ' appears to have placeholder values.')
+            print('>>> OAuth2Manager: configuration may be invalid, ' + \
+                configfile + ' appears to have placeholder values!')
 
         self.app_name = config['app_name']
         self.app_id = config['app_id']
@@ -302,27 +304,10 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
                              headers=merged_headers, data=data,
                              verify=verify, params=params)
 
-    def print_settings(self, msg=None): #------------------------------------<<<
-        """Print current property values to console, with optional message."""
-        print('>>> OAuth2Manager properties' + \
-            ('' if not msg else ' ({0})'.format(msg)) + ':\n' + \
-              '        api_base: {0}\n'.format(self.api_base) + \
-              '          app_id: {0}\n'.format(self.app_id) + \
-              '        app_name: {0}\n'.format(self.app_name) + \
-              '      app_secret: {0}\n'.format(self.app_secret) + \
-              '       auth_base: {0}\n'.format(self.auth_base) + \
-              '        auth_url: {0}\n'.format(self.auth_url) + \
-              '        authcode: {0}\n'.format(self.authcode_abbrev()) + \
-              '        loggedin: {0}\n'.format(self.loggedin) + \
-              '  loggedin_email: {0}\n'.format(self.loggedin_email) + \
-              '   loggedin_name: {0}\n'.format(self.loggedin_name) + \
-              '    redirect_url: {0}\n'.format(str(self.redirect_url)) + \
-              '          scopes: {0}\n'.format(str(self.scopes)) + \
-              '           state: {0}\n'.format(self.state) + \
-              'token_expires_at: {0} ({1:.0f} seconds from now)'. \
-                  format(self.token_expires_at, self.token_seconds()) + \
-              '       token_url: {0}\n'.format(self.token_url) + \
-              '     access_token: {0}\n'.format(self.token_abbrev()))
+    def print_settings(self): #----------------------------------------------<<<
+        """Print current property values to console."""
+        print('>>> OAuth2Manager properties ...')
+        pprint.pprint(self.__dict__)
 
     def refresh_access_token(self): #----------------------------------------<<<
         """Refresh the current access token."""
@@ -352,7 +337,7 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
 
         self.token_type = jsondata['token_type']
         if self.token_type != 'Bearer':
-            print('WARNING: token_type={0}, expected Bearer'. \
+            print('>>> OAuth2Manager: expected Bearer token type, but received {0}'. \
                 format(self.token_type))
 
         # Verify that the same scopes were returned as were requested. The
@@ -363,8 +348,8 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         scopes_returned = \
             set([_.lower() for _ in jsondata['scope'].split(' ')])
         if scopes_expected != scopes_returned:
-            print('WARNING: scopes={0}, expected {1}'. \
-                format(self.token_scope, ' '.join(self.scopes)))
+            print('WARNING: scopes returned = {0}, scopes expected = {1}'. \
+                format(' '.join(scopes_returned), ' '.join(scopes_expected)))
         self.token_scope = jsondata['scope']
 
         # token_expires_at = time.time() value (seconds) at which it expires
