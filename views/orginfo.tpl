@@ -16,6 +16,7 @@
       % if status_code == 200 and org_id:
         <tr><th>Organization ID:</th><td>{{ org_id }}</td></tr>
         <tr><th>Organization Name:</th><td>{{ org_name }}</td></tr>
+        <tr><th>Manager:</th><td>{{ manager }}</td></tr>
       % else:
         <tr><th></th><td>This identity is not in an organization.</td></tr>
       % end

@@ -115,8 +115,11 @@ def orginfo(): #-------------------------------------------------------------<<<
     if response.status_code == 200 and response.json()['value']:
         # current user is in an organization managed by Azure AD
         data = response.json()['value'][0]
+        #/// get manager - GET /users/{id | userPrincipalName}/manager
+        manager = 'Layla Sells' #/// set a manager string
         return dict(org_id=data['id'],
                     org_name=data['displayName'],
+                    manager=manager,
                     status_code=response.status_code,
                     errmsg='')
     else:
