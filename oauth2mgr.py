@@ -340,16 +340,16 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
             print('>>> OAuth2Manager: expected Bearer token type, but received {0}'. \
                 format(self.token_type))
 
-        # Verify that the same scopes were returned as were requested. The
+        # Verify that the scopes returned include all scopes requested. The
         # offline_access scope is never returned by Azure AD, so we don't
         # include it in scopes_expected if present.
         scopes_expected = set([_.lower() for _ in self.scopes
                                if _.lower() != 'offline_access'])
         scopes_returned = \
             set([_.lower() for _ in jsondata['scope'].split(' ')])
-        if scopes_expected != scopes_returned:
-            print('WARNING: scopes returned = {0}, scopes expected = {1}'. \
-                format(' '.join(scopes_returned), ' '.join(scopes_expected)))
+        if scopes_expected > scopes_returned:
+            print('WARNING: expected scopes not returned = {1}'. \
+                format(' '.join(scopes_expected - scopes_returned)))
         self.token_scope = jsondata['scope']
 
         # token_expires_at = time.time() value (seconds) at which it expires
