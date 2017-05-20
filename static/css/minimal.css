@@ -1,0 +1,55 @@
+﻿/* styles used by minimal.tpl */
+
+body {
+    padding-top: 10px;
+}
+
+.homepage-container {
+  width: 800px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+table.homepage {
+  margin: 0 0 10px 0;
+  width: 100%;
+  display: table;
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+}
+
+table.inbox {
+  margin: 0 0 10px 0;
+  width: 100%;
+  display: table;
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+}
+
+table.inbox th {
+  color: #ffffff;
+  background: #2980b9;
+  padding: 6px 12px;
+}
+
+table.inbox td {
+  color: black;
+  padding: 6px 12px;
+  font-family: Consolas, "Courier-New", sans-serif;
+  white-space: nowrap;
+}
+
+table.inbox tr:nth-of-type(odd) {
+  background: #e8e8e8;
+}
+
+.btn-homepage {
+  background-color: #2980b9;
+  color: #ffffff;
+}
+
+.profile-photo {
+  width: 60px;
+  height: 60px;
+  float: right;
+}
