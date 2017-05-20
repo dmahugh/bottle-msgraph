@@ -15,6 +15,8 @@
 <body>
     <div class="container homepage-container">
 
+        <h2>Minimal OAuth2Manager Implementation in Bottle</h2>
+
         % if msgraphapi.loggedin:
 
             <table class="homepage">
