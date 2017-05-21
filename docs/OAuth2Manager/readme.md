@@ -62,9 +62,9 @@ def authorized():
     return msgraphapi.authorized()
 ```
 
-The ```authorized()``` method receives the authorization grant from Azure AD and pass it to ```get_token()```.
+The ```authorized()``` method receives the authorization grant from Azure AD and pass it to ```fetch_token()```.
 
-## get_token() method
+## fetch_token() method
 
 This method retrieves the access token and saves it and related information (expiration time, refresh token) to properties of the OAuth2Manager object, making it ready to handle authentication for calls to the Graph API.
 

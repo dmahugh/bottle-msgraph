@@ -15,7 +15,7 @@ if you have a suggestion or run into any issues. Thanks!
 
 ## Minimal Implementation
 
-For those who want to add [OAuth2Manager](docs/OAuth2Manager) to an existing Bottle app, or start an OAuth 2.0-enabled Bottle app from scratch, an example of a minimal implementation has been included in this repo. It's a single-page app that displays the most recent 10 emails from the authenticated user's inbox, and you can launch it by executing the *minapp.py* program and then pointing your browser to *http://localhost:5000/*. You can connect as a Microsoft-managed identity, and you'll see the latest items in your inbox.
+An example of a minimal implementation is included in this repo, which may be helpful for those who want to add [OAuth2Manager](docs/OAuth2Manager) to an existing Bottle app, or start an OAuth 2.0-enabled Bottle app from scratch. It's a single-page app that displays the most recent 10 emails from the authenticated user's inbox, and you can launch it by executing the *minapp.py* program and then pointing your browser to *http://localhost:5000/*. You can connect as a Microsoft-managed identity, and you'll see the latest items in your inbox.
 
 The minapp.py program is just a simple launcher for the Bottle app (containing no custom code for this app), and the implementation of OAuth2Manager can be found in the route handlers in *minroutes.py*. The core concept is that you create an instance of OAuth2Manager (named _msgraphapi_ in this example, since it's being used with Microsoft Graph), and then you call methods of OAuth2Manager to handle tasks such as logging in, logging out, and accessing a protected resource.
 

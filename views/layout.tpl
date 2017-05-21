@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - bottle-msgraph</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/site.css?version=1.13" />
+    <link rel="stylesheet" type="text/css" href="/static/css/site.css?version=1.01" />
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
 </head>
 
