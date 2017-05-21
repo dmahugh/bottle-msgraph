@@ -13,6 +13,24 @@ For information about how to install and use the sample, see the documentation:
 Pull requests are welcome, or feel free to [log an issue](https://github.com/dmahugh/bottle-msgraph/issues)
 if you have a suggestion or run into any issues. Thanks!
 
+## Minimal Implementation
+
+For those who want to add [OAuth2Manager](docs/OAuth2Manager) to an existing Bottle app, or start an OAuth 2.0-enabled Bottle app from scratch, a minimal implementation has been included in this repo. It is a single-page appe that displays the most recent 10 emails from the authenticated user's inbox, and you can launch the minimal implementation sample by executing the *minapp.py* program and then pointing your browser to *http://localhost:5000/*. You can connect as a Microsoft-managed identity, and you'll see the latest items in your inbox.
+
+The minapp.py program is just a simple launcher for a Bottle app, and the implementation of OAuth2Manager can be found in *minroutes.py*, where the route handlers are defined. The core concept is that you create an instance of OAuth2Manager (named _msgraphapi_ in this example, since it's being used with Microsoft Graph), and then you call methods of OAuth2Manager to handle tasks such as logging in, logging out, and accessing a protected resource.
+
+The three handlers required for authentication are _login_, _logout_, and _authorized_ (which is the target of the Redirect URL that was registered with the application). All three of these route handlers are one-liners that call into the OAuth2Manager object's methods:
+
+![required handlers](docs/images/minimal1.png)
+
+The home page of the app checks whether the user is logged in, and if so then it calls the Graph API to get messages from their inbox:
+
+![home page handler](docs/images/minimal2.png)
+
+The results of the Graph API call are passed to the HTML template, _minimal.tpl_, which renders the message date, From, and Subject in a table:
+
+![minimal OAuth2Manager implementation](docs/images/minimal.jpg)
+
 ## Where to Learn More
 
 * The [Microsoft Graph API](https://developer.microsoft.com/en-us/graph/) site has a variety of information for Graph developers, including SDKs for many languages, code samples, and documentation.
