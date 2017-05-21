@@ -17,10 +17,26 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
     from Azure Active Directory, and provides wrappers for making authenticated
     calls to the Microsoft Graph API.
     """
-    def __init__(self, configfile='config.json'):
+    def __init__(self, config=None):
+        """The config argument is a dictionary of configuration settings. If it
+        contains a configfile entry, settings are loaded from that file (a JSON
+        dictionary), and then any other entries in the config dictionary are
+        applied afterward (and can therefore override settings from the file).
 
-        # handle configuration settings - initialize properties, then
-        # read values from JSON configuration file ...
+        The config object may include any of these keys:
+        configfile = name of JSON configuration file
+        app_name = application name (as registered in an Azure AD tenant)
+        app_id = application id (as registered in an Azure AD tenant)
+        app_secret = application secret (as registered in an Azure AD tenant)
+        redirect_url = redirect url (as registered in an Azure AD tenant)
+        scopes = list of scopes needed (e.g., ['Mail.Send'])
+        api_base = base URL for the protected resource/API; used for resolving
+                   any relative URLs passed to the get() method
+        auth_base = base URL for the authorization request
+        token_url = URL for retrieving an access token via a POST
+        """
+
+        # initialize properties used for OAuth2 configuration ...
         self.app_name = ''
         self.app_id = ''
         self.app_secret = ''
@@ -29,10 +45,36 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.api_base = ''
         self.auth_base = ''
         self.token_url = ''
-        self.config_read(configfile)
 
-        # restore cached session state - initialize properties, then
-        # read values from cache.json ...
+        if 'configfile' in config:
+            # Configuration filename provided, so merge those settings with
+            # other settings (if any) in the config object. Note that any
+            # explicit settings in the config object take precedence over
+            #  settings from the configfile.
+            filesettings = json.loads(open(config['configfile']).read())
+            for key in filesettings:
+                if key not in config:
+                    config[key] = filesettings[key]
+
+        # store configuration settings from config object
+        if 'app_name' in config:
+            self.app_name = config['app_name']
+        if 'app_id' in config:
+            self.app_id = config['app_id']
+        if 'app_secret' in config:
+            self.app_secret = config['app_secret']
+        if 'redirect_url' in config:
+            self.redirect_url = config['redirect_url']
+        if 'scopes' in config:
+            self.scopes = config['scopes']
+        if 'api_base' in config:
+            self.api_base = config['api_base']
+        if 'auth_base' in config:
+            self.auth_base = config['auth_base']
+        if 'token_url' in config:
+            self.token_url = config['token_url']
+
+        # initialize properties used for caching session state ...
         self.auth_url = ''
         self.authcode = ''
         self.state = ''
@@ -47,7 +89,7 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
         self.loggedin_email = ''
         self.loggedin_public = ''
         self.loggedin_photo = None
-        self.cache('read')
+        self.cache('read') # read cached state (if any)
 
         # default is redirect to home page after login
         self.after_login = '/'
@@ -56,11 +98,10 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
             print('>>> OAuth2Manager: ' + \
                 'cached access token is still valid for {0} seconds'. \
                 format(self.token_seconds()))
-            return
-
-        print('>>> OAuth2Manager: cached access token has expired')
-        self.refresh_access_token()
-        self.cache('save')
+        else:
+            print('>>> OAuth2Manager: cached access token has expired')
+            self.refresh_access_token()
+            self.cache('save')
 
     def api_endpoint(self, url): #-------------------------------------------<<<
         """Convert a partial/relative endpoint to a full URL."""
@@ -91,7 +132,7 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
                 format(str(self.state), str(request.query.state)))
         self.state = '' # reset session state to prevent re-use
 
-        token_response = self.get_token(request.query.code)
+        token_response = self.fetch_token(request.query.code)
         if not token_response:
             print('>>> OAuth2Manager: request for access token failed')
             redirect('/')
@@ -180,27 +221,6 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
                 os.remove(photofile)
             print('>>> OAuth2Manager: local cache cleared')
 
-
-    def config_read(self, configfile): #-------------------------------------<<<
-        """Read configuration settings from JSON file."""
-
-        config = json.loads(open(configfile).read())
-        if (config['app_id'].startswith('<') and \
-            config['app_id'].endswith('>')) or \
-            (config['app_secret'].startswith('<') and
-             config['app_secret'].endswith('>')):
-            print('>>> OAuth2Manager: configuration may be invalid, ' + \
-                configfile + ' appears to have placeholder values!')
-
-        self.app_name = config['app_name']
-        self.app_id = config['app_id']
-        self.app_secret = config['app_secret']
-        self.redirect_url = config['redirect_url']
-        self.scopes = config['scopes']
-        self.api_base = config['api_base']
-        self.auth_base = config['auth_base']
-        self.token_url = config['token_url']
-
     def default_headers(self): #---------------------------------------------<<<
         """Returns the default HTTP headers for calls to the Graph API,
         including current access token.
@@ -216,20 +236,7 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
                 'client-request-id' : str(uuid.uuid4()),
                 'return-client-request-id' : 'true'}
 
-    def get(self, endpoint, headers=None, stream=False): #-------------------<<<
-        """GET from API (authenticated with access token)."""
-        # refresh token if within 5 seconds of expiring
-        if self.token_seconds() < 5:
-            self.refresh_access_token()
-
-        merged_headers = self.default_headers()
-        if headers:
-            merged_headers.update(headers)
-        return requests.get(self.api_endpoint(endpoint),
-                            headers=merged_headers,
-                            stream=stream)
-
-    def get_token(self, authcode): #-----------------------------------------<<<
+    def fetch_token(self, authcode): #---------------------------------------<<<
         """Get an OAuth2 access token. Requires the authorization code returned
         from auth_url."""
         self.authcode = authcode
@@ -243,6 +250,19 @@ class OAuth2Manager(object): #-----------------------------------------------<<<
             return response
         else:
             return None # the request for an access token failed
+
+    def get(self, endpoint, headers=None, stream=False): #-------------------<<<
+        """GET from API (authenticated with access token)."""
+        # refresh token if within 5 seconds of expiring
+        if self.token_seconds() < 5:
+            self.refresh_access_token()
+
+        merged_headers = self.default_headers()
+        if headers:
+            merged_headers.update(headers)
+        return requests.get(self.api_endpoint(endpoint),
+                            headers=merged_headers,
+                            stream=stream)
 
     def login(self, redirect_to): #------------------------------------------<<<
         """Log in (authenticate against Azure AD)"""

@@ -12,7 +12,7 @@ from pip.operations import freeze
 from bottle import error, redirect, request, route, template, view
 import oauth2mgr
 
-msgraphapi = oauth2mgr.OAuth2Manager()
+msgraphapi = oauth2mgr.OAuth2Manager(config={'configfile': 'config.json'})
 
 @route('/about')
 @view('about')
