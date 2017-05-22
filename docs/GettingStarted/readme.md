@@ -2,9 +2,12 @@
 
 [Installation](../Installation/readme.md) | [Getting Started](../GettingStarted/readme.md) | [Overview](../Overview/readme.md) | [Sample Queries](../SampleQueries/readme.md) | [OAuth2Manager class](../OAuth2Manager/readme.md) | [repo home](https://github.com/dmahugh/bottle-msgraph)
 
-After [Installation](../Installation/readme.md), the next step is to create a ```config.json``` file. The sample app will read your Azure AD credentials from this file on startup. Follow these steps to set up your ```config.json``` file:
+## configuration OAuth2Manager
 
-* Save a copy of the [config.json template](https://github.com/dmahugh/bottle-msgraph/blob/master/docs/misc/config.json) in the root folder of your project
+After [Installation](../Installation/readme.md), the next step is to configure the OAuth2Manager instance with the information needed to connect to Azure Active Directory and obtain a valid access token. You can put all of these settings in a JSON configuration file, hard-code them into a _config_ dictionary in the source code, or do a combination of the two approaches.
+
+To create a configuration file, copy the [config.json template](https://github.com/dmahugh/bottle-msgraph/blob/master/docs/misc/config.json) into the root folder of your project, and edit it to add your application's name, ID, and secret. You will obtain those settings when you register your application with your Azure AD tenant:
+
 * Go to the [Microsoft Application Registration Portal](https://apps.dev.microsoft.com/) and sign in, then click on the "Add an app" button
 * Give the application a name, and click Create
 * Note the value labeled *Application ID* &mdash; this is the value to copy and paste into config.json for _"app_id"_
@@ -13,6 +16,8 @@ After [Installation](../Installation/readme.md), the next step is to create a ``
 * Click on "Generate New Password" and then copy the displayed value and paste it into config.json for the _"app_secret"_ value
 
 Save your changes to ```config.json```, and you're ready to run the app.
+
+## starting the application
 
 Depending on how you've installed and configured Python on your system, use one of these commands in the root folder to start the application:
 

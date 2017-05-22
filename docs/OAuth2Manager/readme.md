@@ -14,9 +14,9 @@ Here's the relationship between OAuth2Manager and the [OAuth 2.0](http://www.rfc
 
 ![Oauth2 flow](../images/oauth2flow.png)
 
-## config_read() method
+## format of configuration file
 
-This method is called by ```__init__``` to load configuration settings from a ```config.json``` file, as covered in [Getting Started](../GettingStarted/readme.md). The config.json file should have this format:
+The optional configuration file for OAuth2Manager (typically named _config.json_) contains information about the application as registered with the [Application Registration Portal](https://apps.dev.microsoft.com/#/appList), the endpoints for authorization and token requests, and related metadata. Here's an example of the format of a configuration file:
 
 ```json
 {
@@ -35,6 +35,8 @@ This method is called by ```__init__``` to load configuration settings from a ``
     "token_url": "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 }
 ```
+
+Each of these settings must be specified when the OAuth2Manager instance is created, either in the configuration file, as explicit settings in the config dictionary, or a combination of the two.
 
 ## login() method
 
