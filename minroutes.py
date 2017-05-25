@@ -8,8 +8,8 @@ import sys
 from pip.operations import freeze
 from bottle import redirect, request, route, view
 
-from oauth2mgr import OAuth2Manager
-msgraphapi = OAuth2Manager()
+import oauth2mgr
+msgraphapi = oauth2mgr.OAuth2Manager(config={'configfile': 'config.json'})
 
 @route('/')
 @view('minimal')
